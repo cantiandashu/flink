@@ -54,6 +54,7 @@ import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.api.records.URL;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.security.AMRMTokenIdentifier;
+import org.apache.hadoop.yarn.util.ConverterUtils;
 import org.apache.hadoop.yarn.util.Records;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +182,7 @@ public final class Utils {
             LocalResourceVisibility resourceVisibility,
             LocalResourceType resourceType) {
         LocalResource localResource = Records.newRecord(LocalResource.class);
-        localResource.setResource(URL.fromURI(remoteRsrcPath.toUri()));
+        localResource.setResource(ConverterUtils.getYarnUrlFromURI(remoteRsrcPath.toUri()));
         localResource.setSize(resourceSize);
         localResource.setTimestamp(resourceModificationTime);
         localResource.setType(resourceType);

@@ -738,22 +738,22 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
         final String note =
                 "Please check the 'yarn.scheduler.maximum-allocation-mb' and the 'yarn.nodemanager.resource.memory-mb' configuration values\n";
-        if (jobManagerMemoryMb > maximumResourceCapability.getMemorySize()) {
+        if (jobManagerMemoryMb > maximumResourceCapability.getMemory()) {
             throw new YarnDeploymentException(
                     "The cluster does not have the requested resources for the JobManager available!\n"
                             + "Maximum Memory: "
-                            + maximumResourceCapability.getMemorySize()
+                            + maximumResourceCapability.getMemory()
                             + "MB Requested: "
                             + jobManagerMemoryMb
                             + "MB. "
                             + note);
         }
 
-        if (taskManagerMemoryMb > maximumResourceCapability.getMemorySize()) {
+        if (taskManagerMemoryMb > maximumResourceCapability.getMemory()) {
             throw new YarnDeploymentException(
                     "The cluster does not have the requested resources for the TaskManagers available!\n"
                             + "Maximum Memory: "
-                            + maximumResourceCapability.getMemorySize()
+                            + maximumResourceCapability.getMemory()
                             + " Requested: "
                             + taskManagerMemoryMb
                             + "MB. "
@@ -1249,7 +1249,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
         // Set up resource type requirements for ApplicationMaster
         Resource capability = Records.newRecord(Resource.class);
-        capability.setMemorySize(clusterSpecification.getMasterMemoryMB());
+        capability.setMemory(clusterSpecification.getMasterMemoryMB());
         capability.setVirtualCores(flinkConfiguration.get(YarnConfigOptions.APP_MASTER_VCORES));
 
         final String customApplicationName = customName != null ? customName : applicationName;
@@ -1465,8 +1465,8 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         for (int i = 0; i < nodes.size(); i++) {
             NodeReport rep = nodes.get(i);
             long free =
-                    rep.getCapability().getMemorySize()
-                            - (rep.getUsed() != null ? rep.getUsed().getMemorySize() : 0);
+                    rep.getCapability().getMemory()
+                            - (rep.getUsed() != null ? rep.getUsed().getMemory() : 0);
             nodeManagersFree[i] = free;
             totalFreeMemory += free;
             if (free > containerLimit) {
@@ -1494,10 +1494,10 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
             int totalCores = 0;
             for (NodeReport rep : nodes) {
                 final Resource res = rep.getCapability();
-                totalMemory += res.getMemorySize();
+                totalMemory += res.getMemory();
                 totalCores += res.getVirtualCores();
                 ps.format(format, "NodeID", rep.getNodeId());
-                ps.format(format, "Memory", getDisplayMemory(res.getMemorySize()));
+                ps.format(format, "Memory", getDisplayMemory(res.getMemory()));
                 ps.format(format, "vCores", res.getVirtualCores());
                 ps.format(format, "HealthReport", rep.getHealthReport());
                 ps.format(format, "Containers", rep.getNumContainers());

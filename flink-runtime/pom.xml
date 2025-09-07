@@ -17,8 +17,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -41,7 +42,7 @@ under the License.
 		hanging of surefire for jdk8 and jdk11
 		-->
 		<surefire.module.config.jdk21></surefire.module.config.jdk21>
-		<surefire.module.config> ${surefire.module.config.jdk21} <!--
+		<surefire.module.config>${surefire.module.config.jdk21} <!--
 			JobManagerProcessUtilsTest
 			-->--add-opens=java.base/java.util=ALL-UNNAMED <!--
 			ConnectionUtilsTest
@@ -317,6 +318,12 @@ under the License.
 			<artifactId>powermock-api-mockito2</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -380,7 +387,9 @@ under the License.
 				<artifactId>maven-checkstyle-plugin</artifactId>
 
 				<configuration>
-					<suppressionsLocation combine.self="override">/tools/maven/suppressions-runtime.xml</suppressionsLocation>
+					<suppressionsLocation combine.self="override">
+						/tools/maven/suppressions-runtime.xml
+					</suppressionsLocation>
 				</configuration>
 			</plugin>
 
@@ -406,7 +415,9 @@ under the License.
 						<configuration>
 							<excludes>
 								<!-- test-jar is still used by JUnit4 modules -->
-								<exclude>META-INF/services/org.junit.jupiter.api.extension.Extension</exclude>
+								<exclude>
+									META-INF/services/org.junit.jupiter.api.extension.Extension
+								</exclude>
 							</excludes>
 						</configuration>
 					</execution>
@@ -460,16 +471,19 @@ under the License.
 								</goals>
 								<configuration>
 									<target>
-										<condition property="optional.classes" value="--classes '${generate.classes}'"
+										<condition property="optional.classes"
+												   value="--classes '${generate.classes}'"
 												   else="">
 											<isset property="generate.classes"/>
 										</condition>
 										<condition property="optional.prefixes"
-												   value="--prefixes '${generate.prefixes}'" else="">
+												   value="--prefixes '${generate.prefixes}'"
+												   else="">
 											<isset property="generate.prefixes"/>
 										</condition>
-										<java classname="org.apache.flink.test.migration.MigrationTestsSnapshotGenerator"
-											  fork="true" failonerror="true" dir="${project.basedir}">
+										<java
+											classname="org.apache.flink.test.migration.MigrationTestsSnapshotGenerator"
+											fork="true" failonerror="true" dir="${project.basedir}">
 											<classpath refid="maven.test.classpath"/>
 											<arg value="--dir"/>
 											<arg line="${project.basedir}"/>
@@ -495,7 +509,8 @@ under the License.
 			<properties>
 				<surefire.module.config.jdk21> <!--
 					required by AbstractFineGrainedSlotManagerITCase-->
-					-Djava.security.manager=allow</surefire.module.config.jdk21>
+					-Djava.security.manager=allow
+				</surefire.module.config.jdk21>
 			</properties>
 		</profile>
 	</profiles>
