@@ -31,6 +31,7 @@ import org.apache.flink.yarn.configuration.YarnLogConfigUtil;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
 import org.apache.hadoop.yarn.client.api.YarnClient;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
+import org.apache.hadoop.yarn.util.ConverterUtils;
 
 import javax.annotation.Nullable;
 
@@ -65,7 +66,7 @@ public class YarnClusterClientFactory
     public ApplicationId getClusterId(Configuration configuration) {
         checkNotNull(configuration);
         final String clusterId = configuration.get(YarnConfigOptions.APPLICATION_ID);
-        return clusterId != null ? ApplicationId.fromString(clusterId) : null;
+        return clusterId != null ? ConverterUtils.toApplicationId(clusterId) : null;
     }
 
     @Override

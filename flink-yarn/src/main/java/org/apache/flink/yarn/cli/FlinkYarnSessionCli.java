@@ -61,6 +61,7 @@ import org.apache.hadoop.yarn.api.records.ApplicationReport;
 import org.apache.hadoop.yarn.api.records.YarnApplicationState;
 import org.apache.hadoop.yarn.client.api.YarnClient;
 import org.apache.hadoop.yarn.exceptions.YarnException;
+import org.apache.hadoop.yarn.util.ConverterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -320,7 +321,7 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
             try {
                 // try converting id to ApplicationId
                 yarnApplicationIdFromYarnProperties =
-                        ApplicationId.fromString(yarnApplicationIdString);
+                        ConverterUtils.toApplicationId(yarnApplicationIdString);
             } catch (Exception e) {
                 throw new FlinkException(
                         "YARN properties contain an invalid entry for "
@@ -452,9 +453,9 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
 
     private ApplicationId getApplicationId(CommandLine commandLine) {
         if (commandLine.hasOption(applicationId.getOpt())) {
-            return ApplicationId.fromString(commandLine.getOptionValue(applicationId.getOpt()));
+            return ConverterUtils.toApplicationId(commandLine.getOptionValue(applicationId.getOpt()));
         } else if (configuration.getOptional(YarnConfigOptions.APPLICATION_ID).isPresent()) {
-            return ApplicationId.fromString(configuration.get(YarnConfigOptions.APPLICATION_ID));
+            return ConverterUtils.toApplicationId(configuration.get(YarnConfigOptions.APPLICATION_ID));
         } else if (isYarnPropertiesFileMode(commandLine)) {
             return yarnApplicationIdFromYarnProperties;
         }
@@ -590,7 +591,7 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
 
                 if (cmd.hasOption(applicationId.getOpt())) {
                     yarnApplicationId =
-                            ApplicationId.fromString(cmd.getOptionValue(applicationId.getOpt()));
+                            ConverterUtils.toApplicationId(cmd.getOptionValue(applicationId.getOpt()));
 
                     clusterClientProvider = yarnClusterDescriptor.retrieve(yarnApplicationId);
                 } else {
